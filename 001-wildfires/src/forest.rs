@@ -5,12 +5,6 @@ pub struct Position {
     pub y: f32,
 }
 
-#[derive(Clone,Copy)]
-pub struct Dimensions {
-    pub width: usize,
-    pub height: usize,
-}
-
 #[derive(Clone,Copy,PartialEq)]
 pub enum State {
     Empty,
@@ -31,11 +25,11 @@ pub struct Forest {
 }
 
 impl Forest {
-    pub fn new(dimensions: Dimensions, fire_start: (usize,usize), prob_ignite: u8) -> Forest {
-        let mut land: Vec<Vec<Plot>> = Vec::with_capacity(dimensions.width);
-        for x in 0..dimensions.height {
-            let mut cols: Vec<Plot> = Vec::with_capacity(dimensions.height);
-            for y in 0..dimensions.height {
+    pub fn new(dimensions: (usize, usize), fire_start: (usize,usize), prob_ignite: u8) -> Forest {
+        let mut land: Vec<Vec<Plot>> = Vec::with_capacity(dimensions.0);
+        for x in 0..dimensions.1 {
+            let mut cols: Vec<Plot> = Vec::with_capacity(dimensions.1);
+            for y in 0..dimensions.1 {
                 cols.push(Plot {
                     position: Position {
                         x: x as f32,
@@ -45,8 +39,8 @@ impl Forest {
                         //Boundary conditions:
                         (0,_) => State::Empty,
                         (_,0) => State::Empty,
-                        _ if x == dimensions.width-1 => State::Empty,
-                        _ if y == dimensions.height-1 => State::Empty,
+                        _ if x == dimensions.0-1 => State::Empty,
+                        _ if y == dimensions.1-1 => State::Empty,
                         //Intial conditions:
                         _ if (x,y) == fire_start => State::Burning(5),
                         (_,_) => State::Tree,
@@ -76,7 +70,7 @@ impl Forest {
                         ].contains(&State::Burning(4));
                         let ignite = fastrand::u8(0..255) < self.land[x][y].prob_ignite;
                         if neighbour_burning && ignite {
-                            State::Burning(5)
+                            State::Burning(10)
                         } else {
                             State::Tree
                         }

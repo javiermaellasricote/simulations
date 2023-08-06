@@ -34,7 +34,7 @@ fn init(app: &App) -> Model {
             .view(view)
             .build()
             .unwrap(),
-        forest: Forest::new(Dimensions {width: 100, height: 100}, (50,50), 200),
+        forest: Forest::new((100,100), (50,50), 200),
     }
 }
 
