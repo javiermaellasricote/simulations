@@ -5,6 +5,7 @@ use nannou::prelude::{DARKGRAY, GREEN, RED};
 
 struct Model {
     _window_id: window::Id,
+    iteration: i32,
     forest: Forest,
 }
 
@@ -25,6 +26,8 @@ fn view(app: &App, model: &Model, frame: Frame) {
         }
     }
     draw.to_frame(app, &frame).unwrap();
+    let file_name = format!("./output/{:?}.png", model.iteration);
+    app.main_window().capture_frame(file_name);
 }
 
 fn init(app: &App) -> Model {
@@ -34,6 +37,7 @@ fn init(app: &App) -> Model {
             .view(view)
             .build()
             .unwrap(),
+        iteration: 0,
         forest: Forest::new((100,100), (50,50), 200),
     }
 }
@@ -41,6 +45,7 @@ fn init(app: &App) -> Model {
 
 fn update(_app: &App, model: &mut Model, _update: event::Update) {
     model.forest.update();
+    model.iteration += 1;
 }
 
 fn main() {
