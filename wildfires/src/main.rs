@@ -43,9 +43,12 @@ fn init(app: &App) -> Model {
 }
 
 
-fn update(_app: &App, model: &mut Model, _update: event::Update) {
+fn update(app: &App, model: &mut Model, _update: event::Update) {
     model.forest.update();
     model.iteration += 1;
+    if model.iteration > 30 {
+        app.quit();
+    }
 }
 
 fn main() {
